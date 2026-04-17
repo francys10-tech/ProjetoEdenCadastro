@@ -3,27 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Alocação Dinâmico</title>
+    <title>Painel de Monitoramento - Produção</title>
     <style>
-        :root { --primary-red: #d32f2f; --bg-body: #f9f9fb; --border-color: #e0e0e0; --text-main: #333; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-body); padding: 20px; color: var(--text-main); }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; }
-        .sub-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap; gap: 20px; }
-        .btn-group { display: flex; gap: 10px; width: auto; }
-        .btn { border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: flex; gap: 8px; text-transform: uppercase; justify-content: center; align-items: center; }
-        .btn-save { background-color: var(--primary-red); color: white; }
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .card { background: white; border: 1px solid var(--border-color); border-radius: 4px; padding: 15px; }
-        .input-box { margin-bottom: 10px; }
-        .input-box label { display: block; font-size: 9px; font-weight: 700; margin-bottom: 4px; }
-        .input-box select { width: 100%; padding: 7px; border: 1px solid #eee; font-size: 11px; }
-        .filter-box { display: flex; flex-direction: column; min-width: 150px; }
-        .filter-box label { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #555; text-align: center; }
-        /* AQUI: Adicionado text-align: center; e text-align-last: center; */
-        .filter-box select { padding: 8px; font-weight: bold; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; text-align: center; text-align-last: center; }
-        .actions-container { display: flex; align-items: flex-end; gap: 15px; flex-wrap: wrap; justify-content: flex-end; }
+        :root { 
+            --bg-body: #f4f4f9; 
+            --bg-card: #ffffff; 
+            --text-dark: #1a1a1a; 
+            --color-parada: #d32f2f; 
+            --color-quebrada: #fbc02d; 
+            --color-ok: #2e7d32;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-body); margin: 0; padding: 15px; }
         
+        .header { position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); flex-wrap: wrap; gap: 15px; }
+        .header h1 { margin: 0; font-size: 1.5rem; }
+        .header p { margin: 5px 0 0 0; }
+
+        .main-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; align-items: start; }
+        .machine-container { background: #fdfdfd; border-radius: 10px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #e0e0e0; border-top: 6px solid #333; width: 100%; }
+        .machine-container.m1 { border-top-color: #d32f2f; }
+        .machine-container.m2 { border-top-color: #1976d2; }
+        .machine-container.m3 { border-top-color: #7b1fa2; }
+        .machine-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        
+        .station-card { background: var(--bg-card); border-radius: 8px; padding: 12px; border-left: 6px solid var(--color-ok); box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: transform 0.2s ease, box-shadow 0.2s ease; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
+        .station-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); cursor: default; }
+        .station-card.status-parada { border-left-color: var(--color-parada); background-color: #ffebee; }
+        .station-card.status-quebrada { border-left-color: var(--color-quebrada); background-color: #fffde7; }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 5px; flex-wrap: wrap; }
+        .card-header h2 { margin: 0; font-size: 1rem; color: #333; display: flex; align-items: center; white-space: nowrap; }
+        
+        .badge-repetido { background: #333; color: #fff; padding: 1px 4px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); vertical-align: middle; }
+        .info-row { display: flex; flex-direction: column; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #eee; }
+        .info-label { font-size: 9px; font-weight: bold; color: #888; text-transform: uppercase; }
+        .info-value { font-size: 12px; font-weight: 600; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 100%; }
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: auto; }
+        .stat-box { text-align: center; padding: 6px; background: #f8f9fa; border-radius: 4px; min-width: 0; }
+        .stat-num { display: block; font-size: 16px; font-weight: 900; color: #333; }
+        .stat-label { font-size: 8px; font-weight: bold; color: #666; text-transform: uppercase; }
+        
+        select { padding: 4px; border-radius: 4px; border: 1px solid #ccc; font-size: 10px; font-weight: bold; width: auto; max-width: 100%; }
+        #loading-msg { text-align: center; font-weight: bold; color: #d32f2f; padding: 20px; display: none; }
+        
+        .actions-container { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .filter-box { display: flex; flex-direction: column; }
+        .filter-box label { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #555; text-align: center; }
+        
+        /* Regra de centralização aplicada aqui e fortalecida nas options via JavaScript */
+        .filter-box select { padding: 8px; font-weight: bold; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; cursor: pointer; text-align: center; text-align-last: center; }
+        .filter-box select option { text-align: center; }
+
+        .btn-sync { background-color: #333; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; transition: 0.2s; }
+        .btn-sync:hover { background-color: #444; }
+        .btn-global { background-color: #d32f2f; }
+        .btn-global:hover { background-color: #b71c1c; }
+        .btn-print { background-color: #2c3e50; }
+        .btn-print:hover { background-color: #1a252f; }
+
         /* ESTILOS DO MODAL CUSTOMIZADO */
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
         .custom-modal-box { background: #fff; padding: 25px 20px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 320px; max-width: 90%; text-align: center; font-family: 'Segoe UI', Tahoma, sans-serif; }
@@ -37,44 +76,77 @@
         .btn-confirmar { background: #d32f2f; color: #fff; }
         .btn-confirmar:hover { background: #b71c1c; }
 
-        @media (max-width: 768px) {
-            body { padding: 10px; }
-            .sub-header { flex-direction: column; align-items: flex-start; }
-            .actions-container { width: 100%; justify-content: flex-start; }
+        @media (max-width: 650px) {
+            body { padding: 5px; overflow-x: hidden; }
+            .header { flex-direction: column; align-items: stretch; position: relative; padding: 10px; margin-bottom: 10px; }
+            .actions-container { flex-direction: column; gap: 8px; align-items: stretch; }
             .filter-box { width: 100%; }
-            .btn-group { width: 100%; }
-            .btn-save { flex-grow: 1; }
+            .filter-box select { width: 100%; }
+            .btn-sync { margin-top: 5px; width: 100%; padding: 12px; font-size: 13px; }
+            .main-container { gap: 10px; }
+            .machine-container { padding: 6px; border-radius: 6px; }
+            .machine-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+            .station-card { padding: 8px; border-left-width: 4px; }
+            .card-header { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 8px; }
+            .card-header h2 { font-size: 0.95rem; }
+            .card-header select { width: 100%; padding: 4px; font-size: 9px; }
+            .info-row { margin-bottom: 8px; padding-bottom: 4px; }
+            .info-label { font-size: 8px; }
+            .info-value { font-size: 11px; }
+            .stats-grid { gap: 4px; }
+            .stat-box { padding: 4px 2px; }
+            .stat-num { font-size: 13px; }
+            .stat-label { font-size: 7px; letter-spacing: -0.3px; }
+            #status-update { text-align: center; margin-top: 5px; } 
         }
     </style>
 </head>
 <body>
-    <header><h1>Controle de Alocação</h1></header>
-    <div class="sub-header">
+    <div class="header">
         <div>
-            <h2>🔖 Configuração Dinâmica</h2>
-            <p>Os campos mostram a última alocação salva. Requer crachá para salvar.</p>
+            <h1>📊 Painel de Abastecimento</h1>
+            <p>Monitoramento em Tempo Real</p>
         </div>
         <div class="actions-container">
             <div class="filter-box">
                 <label>GRUPO</label>
                 <select id="filtroGrupo" onchange="trocarGrupo()">
-                    <option value="Grupo 1">Grupo 1</option>
-                    <option value="Grupo 2">Grupo 2</option>
-                    <option value="Grupo 3">Grupo 3</option>
-                    <option value="Grupo 4">Grupo 4</option>
-                    <option value="Grupo 5">Grupo 5</option>
-                    <option value="Grupo 6">Grupo 6</option>
-                    <option value="Grupo 7">Grupo 7</option>
-                    <option value="Grupo 8">Grupo 8</option>
+                    <option value="Grupo 1" style="text-align: center;">Grupo 1</option>
+                    <option value="Grupo 2" style="text-align: center;">Grupo 2</option>
+                    <option value="Grupo 3" style="text-align: center;">Grupo 3</option>
+                    <option value="Grupo 4" style="text-align: center;">Grupo 4</option>
+                    <option value="Grupo 5" style="text-align: center;">Grupo 5</option>
+                    <option value="Grupo 6" style="text-align: center;">Grupo 6</option>
+                    <option value="Grupo 7" style="text-align: center;">Grupo 7</option>
+                    <option value="Grupo 8" style="text-align: center;">Grupo 8</option>
                 </select>
             </div>
-            <div class="btn-group">
-                <button id="btnSalvar" class="btn btn-save" onclick="salvarAlocacao()">💾 Salvar Alocação</button>
+            
+            <div class="filter-box">
+                <label>MODELO</label>
+                <select id="filtroModelo" onchange="aplicarFiltroModelo()">
+                    <option value="TODOS" style="text-align: center;">Todos</option>
+                </select>
             </div>
+
+            <div class="filter-box">
+                <label>STATUS GLOBAL</label>
+                <select id="statusGlobal">
+                    <option value="" style="text-align: center;">Selecionar...</option>
+                    <option value="rodando" style="text-align: center;">RODANDO</option>
+                    <option value="parada" style="text-align: center;">PARADA</option>
+                    <option value="quebrada" style="text-align: center;">QUEBRADA</option>
+                </select>
+            </div>
+            <button class="btn-sync btn-global" onclick="alterarStatusGlobal()">⚡ Aplicar Global</button>
+            <button class="btn-sync btn-print" onclick="gerarImpressao()">🖨️ Imprimir</button>
+            <button class="btn-sync" id="btnSyncRef" onclick="sincronizarProducao()">🔄 Atualizar Referência</button>
+            <div id="status-update" style="font-size: 11px; color: #888; line-height: 1.4; text-align: center;">Atualizando...</div>
         </div>
     </div>
-    <div id="msgCarregando" style="display:none; color: #d32f2f; font-weight: bold; margin-bottom: 10px;">⌛ Sincronizando dados atuais...</div>
-    <div class="grid-container" id="stationGrid"></div>
+
+    <div id="loading-msg">⚠️ Erro ao carregar dados!</div>
+    <div class="main-container" id="stationGrid"></div>
 
     <div id="customModalOverlay" class="custom-modal-overlay">
         <div class="custom-modal-box">
@@ -88,10 +160,8 @@
     </div>
 
     <script>
-        const URL_API = "https://script.google.com/macros/s/AKfycbzQKH2Z5xyOUJASsupjo4kskJnYYGVm4i31vxq0UdAYp-P7VZmHYam0FYt-jfbiNJok/exec"; 
-        
-        const dataMap = { "VAZIO": ["VAZIO"], "004 BOR+EVA": ["34/35", "36", "37", "38", "39/40", "41", "42", "43/44", "45", "46", "47/48"], "ADIZERO DRIVE BOR+EVA": ["11/12", "3X/4X", "5/6", "6X/7X", "8/9", "9X/10X"], "AIR MAX NUAXIS BOR+EVA": ["10", "11", "12", "4", "4,5", "5,5", "6", "7", "7,5", "8,5", "9,5"], "BOR SB CHECK+ CONF SB MALOR": ["10", "11", "12", "5,5", "6", "7", "7,5", "8,5", "9,5"], "BUMP 21 EVA+BOR": ["34/35", "36", "40", "41", "42", "43", "44/45"], "COURT VISION ALTA BOR+EVA": ["10", "5,5", "6", "7", "7,5", "8,5", "9"], "CPO HYBRID BOR": ["37", "38", "39", "40", "41", "42", "43", "44"], "D0021 BOR+EVA": ["34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46"], "D0023 EVA + BOR": ["34/35", "36", "37", "38", "39/40", "41", "42", "43/44", "45", "46"], "D0088 EVA + BOR": ["36", "38"], "DOWNSHIFTER 13 BOR+EVA": ["12", "4", "4X", "5X", "6", "7", "7X", "8X"], "DOWNSHIFTER 14 BOR+EVA": ["10", "11", "12", "4", "4,5", "5,5", "6", "7", "7,5", "8,5", "9,5"], "DYNABLAST 6 BOR+EVA": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "FILA 2402 BOR": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45"], "FILA 2421 EVA + BOR": ["34/35", "38/39", "40", "41"], "FILA 2428 EVA+2421 BORR": ["37", "38/39", "40", "41", "42", "43", "44/45"], "FILA 2502 BOR + EVA CORTE": ["37", "38/39", "40", "41", "42", "43", "44/45"], "FILA 2510 EVA+BOR": ["36", "38/39", "40", "42", "43", "46"], "FILA 2525 BOR+EVA": ["T1", "T2", "T3", "T4", "T5"], "FILA 2602 EVA+BOR": ["33", "34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45"], "GEL EQUATION PRE BOR+CONF+PIE": ["12", "4", "5", "5X", "6", "7", "7X", "8X"], "GEL-BACKHAND 2 BOR+EVA": ["10X", "11X", "12", "5", "5X", "6", "7X", "8", "8X", "9", "9X"], "GEL-BACKHAND 2 CLAY BOR+EVA": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "GEL-NAGOYA 4 BOR+EVA": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "GEL-NAGOYA 7 BOR+EVA": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "GEL-PULSE 15 EVA+BOR": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "GEL-QUANTUM 180 5 BOR+EVA": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "GEL-QUANTUM 360 5 BOR+EVA": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "HANDBALL SPEZIAL": ["10,5", "11,5", "12", "4", "4,5", "5,5", "6", "6,5", "7", "8", "9", "9,5"], "HANDBALL SPEZIAL BOR": ["4", "4,5", "5,5", "6", "6,5"], "HG BUMP 24+EVA": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"], "HG HEELPAD BOR+EVA": ["34/35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45/46"], "HG STEALTH 23 BOR": ["37", "38", "39", "40", "41", "42", "43", "44"], "HG UPTAKE+EVA": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"], "HG VORTEX BOR": ["35", "36", "38", "39", "40", "41", "42", "43", "44", "45", "46"], "ID BUMP 24+EVA": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"], "ID BUMP 26+EVA": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"], "ID CUSHION BOR+EVA": ["37", "38", "39", "40", "41", "42", "43", "44"], "ID HEELPAD BOR+EVA": ["34/35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45/46"], "ID HEELPAD JR+EVA": ["30", "31", "32", "33", "34", "35", "36"], "ID HYPER DIAMOND": ["37", "38", "39", "40", "41", "42", "43", "44"], "ID PRECISION BOR+EVA": ["37", "38", "39", "40", "41", "42", "43", "44"], "ID SPEED": ["37", "38", "39", "40", "41", "42", "43", "44"], "ID STABLE BOR+EVA": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"], "ID STEALTH 23 BOR": ["37", "38", "39", "40", "41", "42", "43", "44"], "ID UPTAKE 24+EVA": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"], "ID VORTEX BOR": ["34", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46"], "ID VORTEX BOR INF": ["24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36"], "JR VAPOR 15 CLUB IC BOR": ["1/1X", "2/2X", "3/3X", "4/4X", "5/5X"], "JR VAPOR 15 CLUB TF BOR": ["1/1X", "2/2X", "3/3X", "4/4X", "5/5X"], "LEGEND 10 CLUB TF": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"], "LEGEND 10 IC": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"], "NB 413 BOR+EVA": ["34/36", "37/38", "39/40", "41/42", "43", "44"], "NB500 BOR + CORTE": ["41"], "NIKE AIR WINFLO 11 BOR+EVA": ["10", "11", "12", "4", "4X", "5X", "6", "7", "7X", "8X", "9X"], "NIKE AIR WINFLO 12 BOR+EVA": ["10", "11", "12", "4", "4,5", "5,5", "6", "7", "7,5", "8,5", "9,5"], "NIKE FLEX TRAIN BOR+EVA": ["10", "11", "12", "5,5", "6", "7", "7,5", "8,5", "9,5"], "NIKE QUEST 5 BOR+EVA": ["10", "11", "12", "6", "7", "7X", "8X", "9X"], "NIKE SB CHECK SOLA+PIE": ["10", "11", "12", "4,5", "5,5", "6", "7", "7,5", "8,5", "9,5"], "OT PRO CLAY BOR+EVA": ["46", "47"], "PLACA TESTE BOR": ["U"], "PRIORITY BOR": ["10", "10X", "11", "12", "3X", "4", "4X", "5", "5X", "6", "6X", "7", "7X", "8", "8X", "9", "9X"], "PRO 5 TRAINER": ["36", "37", "38", "39", "40", "41", "42", "43", "44"], "PRO 5 TRAINER BOR+EVA": ["35", "45"], "QUEST 6 EVA+BOR": ["10", "11", "12", "4", "4X", "5X", "6", "7", "7X", "8X", "9X"], "RUN DEFY BOR+EVA": ["10", "11", "12", "4", "4,5", "5,5", "6", "7", "7,5", "8,5", "9,5"], "RUN SWIFT 3 BOR+EVA": ["10", "11", "12", "4", "4X", "5X", "6", "7", "7X", "8X", "9X"], "SAMBA OG": ["10,5", "11,5", "12", "4", "4,5", "5,5", "6", "6,5", "7", "8", "9", "9,5"], "STREET STYLE 24 BOR": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45"], "STREETTALK": ["10,5", "11,5", "11,5/12", "12", "4", "4,5", "4/4,5", "5,5", "5,5/6", "6", "6,5", "6,5/7", "7", "8", "8/9", "9", "9,5", "9X/10X"], "STREETTALK BOR": ["10,5", "11,5", "12", "6,5", "8"], "U471 EVA CORTE + BOR": ["34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44"], "UMBRO TRAINER INF": ["28", "29", "30", "31", "32", "33", "34", "35", "36"], "VAPOR 15 CLUB IC BOR": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"], "VAPOR 15 CLUB TF BOR": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"] };
-        
+        const URL_API = "https://script.google.com/macros/s/AKfycbzQKH2Z5xyOUJASsupjo4kskJnYYGVm4i31vxq0UdAYp-P7VZmHYam0FYt-jfbiNJok/exec";
+
         function customAlert(msg) {
             return new Promise(resolve => {
                 const overlay = document.getElementById('customModalOverlay');
@@ -131,89 +201,226 @@
             });
         }
 
-        const grid = document.getElementById('stationGrid');
-        const modelNames = Object.keys(dataMap).sort();
-        
-        function trocarGrupo() { 
-            const grupo = document.getElementById('filtroGrupo').value; 
-            localStorage.setItem('ultimoGrupoSelecionado', grupo); 
-            renderizarEstacoes(); 
-        }
-        
-        async function renderizarEstacoes() {
+        function trocarGrupo() {
             const grupo = document.getElementById('filtroGrupo').value;
-            const numEstacoes = (grupo === "Grupo 4" || grupo === "Grupo 5") ? 48 : 36;
-            document.getElementById('msgCarregando').style.display = 'block';
-            grid.style.opacity = '0.5';
-            try {
-                const response = await fetch(`${URL_API}?grupo=${grupo}`);
-                const dadosAtuais = await response.json();
-                grid.innerHTML = ''; 
-                for (let i = 1; i <= numEstacoes; i++) {
-                    const salvo = dadosAtuais.find(d => String(d.estacao) === String(i));
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.setAttribute('data-status', salvo ? salvo.status : "parada");
-                    card.innerHTML = `
-                        <div class="card-header"><b>ESTAÇÃO ${i}</b></div>
-                        <div class="input-box"><label>MODELO</label><select class="sel-modelo" onchange="updateSizes(this)"><option value="">Selecionar</option>${modelNames.map(m => `<option value="${m}" ${salvo && m === salvo.modelo ? 'selected' : ''}>${m}</option>`).join('')}</select></div>
-                        <div class="input-box"><label>TAMANHO</label><select class="sel-tamanho"><option value="">Escolha o modelo</option></select></div>`;
-                    grid.appendChild(card);
-                    if (salvo && salvo.modelo) popularTamanhos(card.querySelector('.sel-tamanho'), salvo.modelo, salvo.tamanho);
-                }
-            } catch (e) {} finally { document.getElementById('msgCarregando').style.display = 'none'; grid.style.opacity = '1'; }
+            localStorage.setItem('ultimoGrupoSelecionado', grupo);
+            carregarPainel();
         }
-        
-        function updateSizes(selectModelo) { 
-            popularTamanhos(selectModelo.closest('.card').querySelector('.sel-tamanho'), selectModelo.value, ""); 
-        }
-        
-        function popularTamanhos(el, modelo, sel) {
-            el.innerHTML = '<option value="">Selecionar</option>';
-            if (modelo && dataMap[modelo]) dataMap[modelo].forEach(s => { 
-                const o = document.createElement('option'); 
-                o.value = s; 
-                o.textContent = s; 
-                if (s === sel) o.selected = true; 
-                el.appendChild(o); 
-            });
-        }
-        
-        async function salvarAlocacao() {
-            const crachas = ["48192292175030"];
-            
-            const info = await customPrompt("Para salvar a alocação do " + document.getElementById('filtroGrupo').value + ",\ninforme seu crachá:");
-            
-            if (!info || !crachas.includes(info.trim())) {
-                await customAlert("Acesso negado. Crachá inválido ou não informado.");
-                return;
-            }
 
-            const grupo = document.getElementById('filtroGrupo').value;
-            const agora = new Date().toLocaleString('pt-BR');
-            const payload = { action: "updateAllocation", grupo: grupo, cracha: info.trim(), data: [] };
-            document.querySelectorAll('.card').forEach((c, i) => {
-                const m = c.querySelector('.sel-modelo').value;
-                const t = c.querySelector('.sel-tamanho').value;
-                if(m && t) payload.data.push({ grupo: grupo, estacao: i + 1, modelo: m, tamanho: t, status: c.getAttribute('data-status'), dataHora: agora }); 
+        function aplicarFiltroModelo() {
+            const modeloSelecionado = document.getElementById('filtroModelo').value;
+            const cards = document.querySelectorAll('.station-card');
+            
+            cards.forEach(card => {
+                const modeloCard = card.getAttribute('data-modelo');
+                if (modeloSelecionado === "TODOS" || modeloCard === modeloSelecionado) {
+                    card.style.display = 'flex'; 
+                } else {
+                    card.style.display = 'none'; 
+                }
             });
-            try {
-                const btn = document.getElementById('btnSalvar'); btn.innerText = "⌛ Salvando..."; btn.disabled = true;
-                await fetch(URL_API, { method: 'POST', body: JSON.stringify(payload) });
-                await customAlert('Salvo com sucesso!'); 
-                renderizarEstacoes();
-            } catch (e) { 
-                await customAlert('Erro ao tentar salvar.'); 
-            } finally { 
-                document.getElementById('btnSalvar').innerText = "💾 Salvar Alocação"; document.getElementById('btnSalvar').disabled = false; 
-            }
         }
-        
-        window.onload = () => { 
-            const g = localStorage.getItem('ultimoGrupoSelecionado'); 
-            if (g) document.getElementById('filtroGrupo').value = g; 
-            renderizarEstacoes(); 
+
+        async function carregarPainel() {
+            const grupoAtual = document.getElementById('filtroGrupo').value;
+            const numEstacoes = (grupoAtual === "Grupo 4" || grupoAtual === "Grupo 5") ? 48 : 36;
+            try {
+                const response = await fetch(`${URL_API}?grupo=${grupoAtual}`);
+                const dados = await response.json();
+
+                const modelosUnicos = new Set();
+                dados.forEach(d => {
+                    if (d.modelo && d.modelo !== "Não Alocado" && d.modelo !== "VAZIO") {
+                        modelosUnicos.add(d.modelo.trim());
+                    }
+                });
+
+                const selectModelo = document.getElementById('filtroModelo');
+                const valorSelecionadoAtual = selectModelo.value; 
+                
+                // Forçando o alinhamento central da opção padrão direto no JS
+                selectModelo.innerHTML = '<option value="TODOS" style="text-align: center;">Todos</option>';
+                
+                [...modelosUnicos].sort().forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m;
+                    opt.textContent = m;
+                    opt.style.textAlign = 'center'; // Forçando o alinhamento central nas opções dinâmicas
+                    if (m === valorSelecionadoAtual) opt.selected = true;
+                    selectModelo.appendChild(opt);
+                });
+
+                const contagem = {};
+                dados.forEach(d => {
+                    if (d.modelo && d.tamanho && d.modelo !== "Não Alocado" && d.modelo !== "VAZIO") {
+                        const tamanhoNorm = String(d.tamanho).replace('.', ',').trim();
+                        const chave = `${d.modelo.trim()}-${tamanhoNorm}`;
+                        contagem[chave] = (contagem[chave] || 0) + 1;
+                    }
+                });
+
+                const grid = document.getElementById('stationGrid');
+                document.getElementById('loading-msg').style.display = 'none';
+                grid.innerHTML = "";
+
+                const numMaquinas = 3;
+                const containersMaquinas = {};
+                for (let m = 1; m <= numMaquinas; m++) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = `machine-container m${m}`;
+                    wrapper.innerHTML = `<div class="machine-grid" id="grid-maq-${m}"></div>`;
+                    grid.appendChild(wrapper);
+                    containersMaquinas[m] = wrapper.querySelector('.machine-grid');
+                }
+
+                const criarCardElemento = (i) => {
+                    let item = dados.find(d => String(d.estacao) === String(i));
+                    const statusBanco = (item && item.status) ? item.status : 'parada';
+                    const modeloBanco = (item && item.modelo) ? item.modelo : 'Não Alocado';
+                    const tamanhoBanco = (item && item.tamanho) ? String(item.tamanho).replace('.', ',').trim() : '--';
+                    const chaveAtual = `${modeloBanco.trim()}-${tamanhoBanco}`;
+                    const totalRepetido = contagem[chaveAtual] || 0;
+                    const badgeRepetido = totalRepetido > 1 ? `<span class="badge-repetido">${totalRepetido}x</span>` : "";
+
+                    const card = document.createElement('div');
+                    card.className = `station-card status-${statusBanco}`;
+                    card.setAttribute('data-modelo', modeloBanco.trim());
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <h2>EST ${String(i).padStart(2, '0')}${badgeRepetido}</h2>
+                            <select onchange="mudarStatus('${grupoAtual}', ${i}, this.value)">
+                                <option value="rodando" ${statusBanco === 'rodando' ? 'selected' : ''}>RODANDO</option>
+                                <option value="parada" ${statusBanco === 'parada' ? 'selected' : ''}>PARADA</option>
+                                <option value="quebrada" ${statusBanco === 'quebrada' ? 'selected' : ''}>QUEBRADA</option>
+                            </select>
+                        </div>
+                        <div class="info-row"><span class="info-label">Modelo</span><span class="info-value" title="${modeloBanco}">${modeloBanco}</span></div>
+                        <div class="info-row"><span class="info-label">Tamanho</span><span class="info-value">${tamanhoBanco}</span></div>
+                        <div class="stats-grid">
+                            <div class="stat-box"><span class="stat-num">${item && item.giro ? item.giro : 0}</span><span class="stat-label">Giro</span></div>
+                            <div class="stat-box"><span class="stat-num">${item && item.refilagem ? item.refilagem : 0}</span><span class="stat-label">Refil</span></div>
+                            <div class="stat-box"><span class="stat-num">${item && item.reprovados ? item.reprovados : 0}</span><span class="stat-label">Reprov</span></div>
+                        </div>
+                    `;
+                    return card;
+                };
+
+                const metade = numEstacoes / 2;
+                for (let i = 1; i <= metade; i++) {
+                    const numMaq = ((i - 1) % 3) + 1; 
+                    const gridDestino = containersMaquinas[numMaq];
+                    gridDestino.appendChild(criarCardElemento(i));
+                    gridDestino.appendChild(criarCardElemento(i + metade));
+                }
+
+                const infoData = dados.find(d => d.dataHora);
+                let dataAlocacaoFormatada = '--';
+                if (infoData && infoData.dataHora && infoData.dataHora.includes('/')) {
+                    const partes = infoData.dataHora.split(' ');
+                    const diaMes = partes[0].substring(0, 5); 
+                    const horaMin = partes[1].substring(0, 5); 
+                    dataAlocacaoFormatada = `${diaMes} - ${horaMin}`;
+                }
+                
+                document.getElementById('status-update').innerHTML = 
+                    `Última atualização: ${new Date().toLocaleTimeString()}<br>` + 
+                    `Últ. Alocação: ${dataAlocacaoFormatada}`;
+                    
+                aplicarFiltroModelo(); 
+
+            } catch (e) { document.getElementById('loading-msg').style.display = 'block'; }
+        }
+
+        async function sincronizarProducao() {
+            const grupoAtual = document.getElementById('filtroGrupo').value;
+            const btn = document.getElementById('btnSyncRef');
+            try {
+                btn.disabled = true; btn.innerText = "⌛ Aguarde...";
+                document.getElementById('status-update').innerText = "Sincronizando banco de dados...";
+                await fetch(URL_API, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "syncProduction", grupo: grupoAtual }) });
+                setTimeout(async () => {
+                    await customAlert('Solicitação enviada! Atualize em instantes.');
+                    carregarPainel();
+                    btn.disabled = false; btn.innerHTML = "🔄 Atualizar Referência";
+                }, 2000);
+            } catch (error) { await customAlert('Erro na conexão.'); btn.disabled = false; btn.innerHTML = "🔄 Atualizar Referência"; }
+        }
+
+        function gerarImpressao() {
+            const grupo = document.getElementById('filtroGrupo').value;
+            const dataAtual = new Date().toLocaleString('pt-BR');
+            const stations = document.querySelectorAll('.station-card');
+            let printContent = `<html><head><title>Relatório - ${grupo}</title><style>@page { size: A4; margin: 8mm; } body { font-family: 'Segoe UI', sans-serif; color: #222; } .print-header { border-bottom: 3px solid #333; margin-bottom: 15px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end; } table { width: 100%; border-collapse: collapse; table-layout: fixed; } th, td { border: 1px solid #999; padding: 6px 4px; text-align: center; font-size: 8.5pt; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; } th { background-color: #f0f0f0; font-weight: bold; text-transform: uppercase; } .st-rodando { color: #2e7d32; font-weight: bold; } .st-parada { color: #d32f2f; font-weight: bold; } .st-quebrada { color: #b7950b; font-weight: bold; }</style></head><body><div class="print-header"><div><h1>${grupo} - Relatório de Alocação</h1></div><div>Gerado: ${dataAtual}</div></div><table><thead><tr><th style="width:35px;">EST</th><th>MODELO</th><th style="width:70px;">TAM</th><th style="width:45px;">GIRO</th><th style="width:45px;">REFIL</th><th style="width:45px;">REPR</th><th style="width:75px;">STATUS</th></tr></thead><tbody>`;
+            let dadosImpressao = [];
+            stations.forEach(card => {
+                if (card.style.display === 'none') return; 
+
+                const h2Text = card.querySelector('h2').innerText;
+                const match = h2Text.match(/EST\s*(\d+)/);
+                const numEstacao = match ? parseInt(match[1], 10) : 0;
+                const mod = card.querySelector('.info-row:nth-child(2) .info-value').innerText;
+                const tam = card.querySelector('.info-row:nth-child(3) .info-value').innerText;
+                const giro = card.querySelector('.stats-grid .stat-box:nth-child(1) .stat-num').innerText;
+                const refil = card.querySelector('.stats-grid .stat-box:nth-child(2) .stat-num').innerText;
+                const repr = card.querySelector('.stats-grid .stat-box:nth-child(3) .stat-num').innerText;
+                let statusTxt = "", statusCls = "";
+                if(card.classList.contains('status-rodando')) { statusTxt = "RODANDO"; statusCls = "st-rodando"; }
+                else if(card.classList.contains('status-parada')) { statusTxt = "PARADA"; statusCls = "st-parada"; }
+                else { statusTxt = "QUEBRADA"; statusCls = "st-quebrada"; }
+                dadosImpressao.push({ numero: numEstacao, html: `<tr><td style="font-weight:bold;">${numEstacao}</td><td style="text-align:left; padding-left:5px;">${mod}</td><td>${tam}</td><td>${giro}</td><td>${refil}</td><td>${repr}</td><td class="${statusCls}">${statusTxt}</td></tr>` });
+            });
+            dadosImpressao.sort((a, b) => a.numero - b.numero);
+            dadosImpressao.forEach(item => { printContent += item.html; });
+            printContent += `</tbody></table></body></html>`;
+            const win = window.open('', '_blank'); win.document.write(printContent); win.document.close();
+            setTimeout(() => { win.print(); win.close(); }, 500);
+        }
+
+        async function alterarStatusGlobal() {
+            const novoStatus = document.getElementById('statusGlobal').value;
+            if (!novoStatus) { await customAlert("Selecione um status primeiro."); return; }
+            
+            const crachas = ["48192292175030"];
+            const info = await customPrompt(`Colocar TODAS as estações como ${novoStatus.toUpperCase()}?\n\nInforme seu crachá para confirmar:`);
+            
+            if (!info || !crachas.includes(info.trim())) { await customAlert("Acesso negado. Crachá inválido ou não informado."); return; }
+            
+            const grupoAtual = document.getElementById('filtroGrupo').value;
+            const numEstacoes = (grupoAtual === "Grupo 4" || grupoAtual === "Grupo 5") ? 48 : 36;
+            try {
+                document.getElementById('status-update').innerText = "Alterando todas...";
+                const promessas = [];
+                for (let i = 1; i <= numEstacoes; i++) {
+                    promessas.push(fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "updateStatus", grupo: grupoAtual, estacao: i, status: novoStatus, cracha: info.trim() }) }));
+                }
+                await Promise.all(promessas); 
+                await customAlert(`Sucesso! Status alterado para ${novoStatus.toUpperCase()}.`); 
+                carregarPainel();
+            } catch (err) { carregarPainel(); }
+        }
+
+        async function mudarStatus(grupo, estacao, novoStatus) {
+            const crachas = ["48192292175030"];
+            const info = await customPrompt(`Mudar EST ${estacao} para ${novoStatus.toUpperCase()}.\n\nInforme seu crachá:`);
+            
+            if (!info || !crachas.includes(info.trim())) { 
+                await customAlert("Acesso negado. Alteração cancelada."); 
+                carregarPainel(); 
+                return; 
+            }
+            try {
+                document.getElementById('status-update').innerText = "Salvando status...";
+                await fetch(URL_API, { method: 'POST', body: JSON.stringify({ action: "updateStatus", grupo: grupo, estacao: estacao, status: novoStatus, cracha: info.trim() }) });
+                carregarPainel();
+            } catch (err) { carregarPainel(); }
+        }
+
+        window.onload = () => {
+            const g = localStorage.getItem('ultimoGrupoSelecionado');
+            if (g) document.getElementById('filtroGrupo').value = g;
+            carregarPainel();
         };
+        setInterval(carregarPainel, 30000);
     </script>
 </body>
 </html>
