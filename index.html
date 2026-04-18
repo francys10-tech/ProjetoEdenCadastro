@@ -23,7 +23,6 @@
         .filter-box select { padding: 8px; font-weight: bold; border-radius: 5px; border: 1px solid #ccc; font-size: 14px;}
         .actions-container { display: flex; align-items: flex-end; gap: 15px; flex-wrap: wrap; justify-content: flex-end; }
         
-        /* ESTILOS DO MODAL CUSTOMIZADO */
         .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
         .custom-modal-box { background: #fff; padding: 25px 20px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 320px; max-width: 90%; text-align: center; font-family: 'Segoe UI', Tahoma, sans-serif; }
         .custom-modal-box h3 { margin-top: 0; font-size: 15px; color: #333; margin-bottom: 20px; font-weight: 600; line-height: 1.4; white-space: pre-line; }
@@ -89,21 +88,90 @@
     <script>
         const URL_API = "https://script.google.com/macros/s/AKfycbzQKH2Z5xyOUJASsupjo4kskJnYYGVm4i31vxq0UdAYp-P7VZmHYam0FYt-jfbiNJok/exec"; 
         
-        const dataMap = { "VAZIO": ["VAZIO"], "004 BOR+EVA": ["34/35", "36", "37", "38", "39/40", "41", "42", "43/44", "45", "46", "47/48"], "ADIZERO DRIVE BOR+EVA": ["11/12", "3X/4X", "5/6", "6X/7X", "8/9", "9X/10X"], "AIR MAX NUAXIS BOR+EVA": ["10", "11", "12", "4", "4,5", "5,5", "6", "7", "7,5", "8,5", "9,5"], "BOR SB CHECK+ CONF SB MALOR": ["10", "11", "12", "5,5", "6", "7", "7,5", "8,5", "9,5"], "BUMP 21 EVA+BOR": ["34/35", "36", "40", "41", "42", "43", "44/45"], "COURT VISION ALTA BOR+EVA": ["10", "5,5", "6", "7", "7,5", "8,5", "9"], "CPO HYBRID BOR": ["37", "38", "39", "40", "41", "42", "43", "44"], "D0021 BOR+EVA": ["34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46"], "D0023 EVA + BOR": ["34/35", "36", "37", "38", "39/40", "41", "42", "43/44", "45", "46"], "D0088 EVA + BOR": ["36", "38"], "DOWNSHIFTER 13 BOR+EVA": ["12", "4", "4X", "5X", "6", "7", "7X", "8X"], "DOWNSHIFTER 14 BOR+EVA": ["10", "11", "12", "4", "4,5", "5,5", "6", "7", "7,5", "8,5", "9,5"], "DYNABLAST 6 BOR+EVA": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "FILA 2402 BOR": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45"], "FILA 2421 EVA + BOR": ["34/35", "38/39", "40", "41"], "FILA 2428 EVA+2421 BORR": ["37", "38/39", "40", "41", "42", "43", "44/45"], "FILA 2502 BOR + EVA CORTE": ["37", "38/39", "40", "41", "42", "43", "44/45"], "FILA 2510 EVA+BOR": ["36", "38/39", "40", "42", "43", "46"], "FILA 2525 BOR+EVA": ["T1", "T2", "T3", "T4", "T5"], "FILA 2602 EVA+BOR": ["33", "34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45"], "GEL EQUATION PRE BOR+CONF+PIE": ["12", "4", "5", "5X", "6", "7", "7X", "8X"], "GEL-BACKHAND 2 BOR+EVA": ["10X", "11X", "12", "5", "5X", "6", "7X", "8", "8X", "9", "9X"], "GEL-BACKHAND 2 CLAY BOR+EVA": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "GEL-NAGOYA 4 BOR+EVA": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "GEL-NAGOYA 7 BOR+EVA": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "GEL-PULSE 15 EVA+BOR": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "GEL-QUANTUM 180 5 BOR+EVA": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "GEL-QUANTUM 360 5 BOR+EVA": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"], "HANDBALL SPEZIAL": ["10,5", "11,5", "12", "4", "4,5", "5,5", "6", "6,5", "7", "8", "9", "9,5"], "HANDBALL SPEZIAL BOR": ["4", "4,5", "5,5", "6", "6,5"], "HG BUMP 24+EVA": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"], "HG HEELPAD BOR+EVA": ["34/35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45/46"], "HG STEALTH 23 BOR": ["37", "38", "39", "40", "41", "42", "43", "44"], "HG UPTAKE+EVA": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"], "HG VORTEX BOR": ["35", "36", "38", "39", "40", "41", "42", "43", "44", "45", "46"], "ID BUMP 24+EVA": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"], "ID BUMP 26+EVA": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"], "ID CUSHION BOR+EVA": ["37", "38", "39", "40", "41", "42", "43", "44"], "ID HEELPAD BOR+EVA": ["34/35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45/46"], "ID HEELPAD JR+EVA": ["30", "31", "32", "33", "34", "35", "36"], "ID HYPER DIAMOND": ["37", "38", "39", "40", "41", "42", "43", "44"], "ID PRECISION BOR+EVA": ["37", "38", "39", "40", "41", "42", "43", "44"], "ID SPEED": ["37", "38", "39", "40", "41", "42", "43", "44"], "ID STABLE BOR+EVA": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"], "ID STEALTH 23 BOR": ["37", "38", "39", "40", "41", "42", "43", "44"], "ID UPTAKE 24+EVA": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"], "ID VORTEX BOR": ["34", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46"], "ID VORTEX BOR INF": ["24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36"], "JR VAPOR 15 CLUB IC BOR": ["1/1X", "2/2X", "3/3X", "4/4X", "5/5X"], "JR VAPOR 15 CLUB TF BOR": ["1/1X", "2/2X", "3/3X", "4/4X", "5/5X"], "LEGEND 10 CLUB TF": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"], "LEGEND 10 IC": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"], "NB 413 BOR+EVA": ["34/36", "37/38", "39/40", "41/42", "43", "44"], "NB500 BOR + CORTE": ["41"], "NIKE AIR WINFLO 11 BOR+EVA": ["10", "11", "12", "4", "4X", "5X", "6", "7", "7X", "8X", "9X"], "NIKE AIR WINFLO 12 BOR+EVA": ["10", "11", "12", "4", "4,5", "5,5", "6", "7", "7,5", "8,5", "9,5"], "NIKE FLEX TRAIN BOR+EVA": ["10", "11", "12", "5,5", "6", "7", "7,5", "8,5", "9,5"], "NIKE QUEST 5 BOR+EVA": ["10", "11", "12", "6", "7", "7X", "8X", "9X"], "NIKE SB CHECK SOLA+PIE": ["10", "11", "12", "4,5", "5,5", "6", "7", "7,5", "8,5", "9,5"], "OT PRO CLAY BOR+EVA": ["46", "47"], "PLACA TESTE BOR": ["U"], "PRIORITY BOR": ["10", "10X", "11", "12", "3X", "4", "4X", "5", "5X", "6", "6X", "7", "7X", "8", "8X", "9", "9X"], "PRO 5 TRAINER": ["36", "37", "38", "39", "40", "41", "42", "43", "44"], "PRO 5 TRAINER BOR+EVA": ["35", "45"], "QUEST 6 EVA+BOR": ["10", "11", "12", "4", "4X", "5X", "6", "7", "7X", "8X", "9X"], "RUN DEFY BOR+EVA": ["10", "11", "12", "4", "4,5", "5,5", "6", "7", "7,5", "8,5", "9,5"], "RUN SWIFT 3 BOR+EVA": ["10", "11", "12", "4", "4X", "5X", "6", "7", "7X", "8X", "9X"], "SAMBA OG": ["10,5", "11,5", "12", "4", "4,5", "5,5", "6", "6,5", "7", "8", "9", "9,5"], "STREET STYLE 24 BOR": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45"], "STREETTALK": ["10,5", "11,5", "11,5/12", "12", "4", "4,5", "4/4,5", "5,5", "5,5/6", "6", "6,5", "6,5/7", "7", "8", "8/9", "9", "9,5", "9X/10X"], "STREETTALK BOR": ["10,5", "11,5", "12", "6,5", "8"], "U471 EVA CORTE + BOR": ["34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44"], "UMBRO TRAINER INF": ["28", "29", "30", "31", "32", "33", "34", "35", "36"], "VAPOR 15 CLUB IC BOR": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"], "VAPOR 15 CLUB TF BOR": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"] };
+        const dataMap = {
+            "VAZIO": ["VAZIO"],
+            "004 SL BOR": ["34/35", "36", "37", "38", "39/40", "41", "42", "43/44", "45", "46", "47/48"],
+            "ADIZERO DRIVE RC SL BOR": ["11/12", "3X/4X", "5/6", "6X/7X", "8/9", "9X/10X"],
+            "AIR MAX NUAXIS SL BOR": ["10", "11", "12", "4", "4.5", "5.5", "6", "7", "7.5", "8.5", "9.5"],
+            "AIR WINFLO 11 SL BOR": ["10", "11", "12", "4", "4X", "5X", "6", "7", "7X", "8X", "9X"],
+            "AIR WINFLO 12 SL BOR": ["10", "11", "12", "4", "4.5", "5.5", "6", "7", "7.5", "8.5", "9.5"],
+            "BUMP 21 ID SL": ["34/35", "36", "40", "41", "42", "43", "44/45"],
+            "BUMP 24 HG TIPO Z SL BOR": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"],
+            "BUMP 24 ID TIPO Z SL BOR": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"],
+            "BUMP 26 ID SL BOR": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"],
+            "COURT VISION ALTA SL": ["10", "5.5", "6", "7", "7.5", "8.5", "9"],
+            "CPO HYBRID SL BOR": ["37", "38", "39", "40", "41", "42", "43", "44"],
+            "D0021 SL BOR": ["34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46"],
+            "D0023 SL BOR": ["34/35", "36", "37", "38", "39/40", "41", "42", "43/44", "45", "46"],
+            "D0088 SL BOR": ["34/35", "36", "37", "38", "39/40", "41", "42", "43/44", "45", "46", "47/48"],
+            "DOWNSHIFTER 14 SL BOR": ["10", "11", "12", "4", "4.5", "5.5", "6", "7", "7.5", "8.5", "9.5"],
+            "DOWNSHIFTER13 SL BOR": ["4", "4X", "5X", "6", "7", "7X", "8X"],
+            "DYNABLAST 6 SL BOR": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"],
+            "FILA 2402 SL BOR": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45"],
+            "FILA 2421 SL BOR": ["34/35", "37", "38/39", "40", "41", "42", "43", "44/45"],
+            "FILA 2502 BICOLOR SL BOR": ["37", "38/39", "40", "41", "42", "43", "44/45"],
+            "FILA 2510 SL BOR": ["36", "38/39", "42", "43"],
+            "FILA 2602 SL BOR": ["33", "34/35", "36", "37", "38/39", "40", "41", "43", "44/45"],
+            "FLEX TRAIN SL BOR": ["10", "11", "12", "5.5", "6", "7", "7.5", "8.5", "9.5"],
+            "GEL EQUATION SL BOR": ["10X", "12", "4", "5", "5X", "6", "7", "7X", "8X"],
+            "GEL-BACKHAND CLAY 2": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"],
+            "GEL-BACKHAND2 SL BOR": ["10X", "11X", "12", "5", "5X", "6", "7X", "8", "8X", "9", "9X"],
+            "GEL-NAGOYA 4 SL BOR": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"],
+            "GEL-NAGOYA 7 SL BOR": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"],
+            "GEL-PULSE 15 SL BOR": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"],
+            "GEL-QUANTUM 180 5": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"],
+            "GEL-QUANTUM 360 5": ["10X", "11X", "12", "4", "5", "5X", "6", "7", "7X", "8", "8X", "9", "9X"],
+            "HANDBALL SPEZIAL SL BOR": ["10.5", "11.5", "12", "4", "4.5", "5.5", "6", "6.5", "7", "8", "9", "9.5"],
+            "HEELPAD HG SL BOR": ["34/35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45/46"],
+            "HEELPAD ID INF SL BOR": ["30", "31", "32", "33", "34", "35", "36"],
+            "HG STEALTH 23 SL BOR": ["37", "38", "39", "40", "41", "42", "43", "44"],
+            "HG VORTEX SL BOR": ["38", "39", "40", "41", "42", "43", "45", "46"],
+            "HYPER DIAMOND ID SL BOR": ["37", "38", "39", "40", "41", "42", "43", "44"],
+            "ID CUSHION SL BOR": ["37", "38", "39", "40", "41", "42", "43", "44"],
+            "ID HEELPAD SL BOR": ["34/35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45/46"],
+            "ID PRECISION SL BOR": ["37", "38", "39", "40", "41", "42", "43", "44"],
+            "ID STABLE SL BOR": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"],
+            "ID STEALTH 23 SL BOR": ["37", "38", "39", "40", "41", "42", "43", "44"],
+            "ID VORTEX INF SL BOR": ["24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36"],
+            "ID VORTEX SL BOR": ["37", "38", "39", "40", "41", "42", "43", "44", "45", "46"],
+            "JR VAPOR 15 CL IC": ["1/1X", "2/2X", "3/3X", "4/4X", "5/5X"],
+            "JR VAPOR 15 CL IC BICOLOR": ["1/1X", "3/3X", "4/4X", "5/5X"],
+            "JR VAPOR 15 CL TF": ["1/1X", "2/2X", "3/3X", "4/4X", "5/5X"],
+            "LEG 10 CLUB IC SL BO": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"],
+            "LEG 10 CLUB TF SL BO": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"],
+            "NB 413 SL BOR": ["34/36", "37/38", "39/40", "41/42", "43", "44"],
+            "NB471 SL BOR": ["34", "35", "38", "39", "40", "41", "42", "43"],
+            "NIKE QUEST 5 SL BOR": ["10", "11", "12", "6", "7", "7X", "8X", "9X"],
+            "NIKE SB CHECK SL BOR BICO": ["10", "11", "12", "4.5", "5.5", "6", "7", "7.5", "8.5", "9.5"],
+            "PRIORITY SL BOR": ["10", "10X", "11", "12", "4", "4X", "5X", "6", "6X", "7", "7X", "8", "8X", "9", "9X"],
+            "PRIORITY SL BOR BICOLOR": ["10", "11", "12", "3X", "4", "4X", "5", "5X", "6", "6X", "7", "7X", "8", "8X", "9", "9X"],
+            "PRO 5 TRAINER SL BOR": ["35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+            "QUEST 6 BOR": ["10", "11", "12", "4", "4X", "5X", "6", "7", "7X", "8X", "9X"],
+            "RUN DEFY SL BOR": ["10", "11", "12", "4", "4.5", "5.5", "6", "7", "7.5", "8.5", "9.5"],
+            "RUN SWIFT 3 SL": ["10", "11", "12", "4", "4X", "5X", "6", "7", "7X", "8X", "9X"],
+            "SAMBA OG SL BOR": ["10.5", "11.5", "12", "4", "4.5", "5.5", "6", "6.5", "7", "8", "9", "9.5"],
+            "SOLADO TNR SL BOR": ["28", "29", "30", "31", "32", "33", "34", "35", "36"],
+            "STREET STYLE 24 BOR": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45"],
+            "STREETTALK BIQ SL BOR": ["11.5/12", "4/4.5", "5.5/6", "6.5/7", "8/9", "9X/10X"],
+            "STREETTALK SL BOR": ["10.5", "11.5", "12", "4", "4.5", "5.5", "6", "6.5", "7", "8", "9", "9.5"],
+            "UPTAKE 25 HG SL BOR": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"],
+            "UPTAKE 25 ID SL BOR": ["34/35", "36", "37", "38/39", "40", "41", "42", "43", "44/45", "46"],
+            "VAPOR 15 CL IC SL BO": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"],
+            "VAPOR 15 CL IC SL BO BICO": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"],
+            "VAPOR 15 CL TF SL BO": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"],
+            "VAPOR 15 CL TF SL BO BICO": ["10/10X", "11/11X", "12/12X", "4/4X", "5/5X", "6/6X", "7/7X", "8/8X", "9/9X"]
+        };
         
-        // FUNÇÕES DO MODAL CUSTOMIZADO
         function customAlert(msg) {
             return new Promise(resolve => {
                 const overlay = document.getElementById('customModalOverlay');
                 document.getElementById('customModalMessage').innerText = msg;
                 document.getElementById('customModalInput').style.display = 'none';
                 document.getElementById('customModalBtnCancel').style.display = 'none';
-                
                 const btnOk = document.getElementById('customModalBtnOk');
                 btnOk.style.display = 'block';
                 btnOk.innerText = 'Entendi';
                 overlay.style.display = 'flex';
-
                 btnOk.onclick = () => { overlay.style.display = 'none'; resolve(true); };
             });
         }
@@ -115,7 +183,6 @@
                 document.getElementById('customModalMessage').innerText = msg;
                 input.style.display = 'block';
                 input.value = '';
-                
                 const btnCancel = document.getElementById('customModalBtnCancel');
                 const btnOk = document.getElementById('customModalBtnOk');
                 btnCancel.style.display = 'block';
@@ -123,10 +190,8 @@
                 btnOk.innerText = 'Confirmar';
                 overlay.style.display = 'flex';
                 input.focus();
-
                 btnOk.onclick = () => { overlay.style.display = 'none'; resolve(input.value); };
                 btnCancel.onclick = () => { overlay.style.display = 'none'; resolve(null); };
-                
                 input.onkeypress = (e) => { if(e.key === 'Enter') btnOk.click(); };
             });
         }
@@ -181,14 +246,11 @@
         
         async function salvarAlocacao() {
             const crachas = ["48192292175030"];
-            
             const info = await customPrompt("Para salvar a alocação do " + document.getElementById('filtroGrupo').value + ",\ninforme seu crachá:");
-            
             if (!info || !crachas.includes(info.trim())) {
                 await customAlert("Acesso negado. Crachá inválido ou não informado.");
                 return;
             }
-
             const grupo = document.getElementById('filtroGrupo').value;
             const agora = new Date().toLocaleString('pt-BR');
             const payload = { action: "updateAllocation", grupo: grupo, cracha: info.trim(), data: [] };
