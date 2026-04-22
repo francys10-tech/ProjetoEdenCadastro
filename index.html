@@ -91,7 +91,7 @@
     </div>
 
     <script>
-        // URL UNIFICADA PARA OS DOIS SISTEMAS
+        // API ORIGINAL DO CADASTRO (Mantida intacta)
         const URL_API = "https://script.google.com/macros/s/AKfycbw3CQXra_RWyZ_oaut_NP8AEhgz7ul5EKRXVLBHdOfbRoUIbc1toOHMOK5oF_Kdk8Wh/exec"; 
         
         const usuariosAutorizados = {
@@ -210,8 +210,8 @@
             document.getElementById('msgCarregando').style.display = 'block';
             grid.style.opacity = '0.5';
             try {
-                // ADICIONADO CACHE-BUSTER AQUI PARA GITHUB PAGES (_t=...)
-                const response = await fetch(`${URL_API}?grupo=${grupo}&_t=${new Date().getTime()}`);
+                // Anti-cache no painel de CAD
+                const response = await fetch(`${URL_API}?grupo=${grupo}&_t=${new Date().getTime()}`, { cache: "no-store" });
                 const dadosAtuais = await response.json();
                 grid.innerHTML = ''; 
                 for (let i = 1; i <= numEstacoes; i++) {
@@ -266,6 +266,7 @@
                 const btn = document.getElementById('btnSalvar'); btn.innerText = "⌛ Salvando..."; btn.disabled = true;
                 await fetch(URL_API, { method: 'POST', body: JSON.stringify(payload) });
                 
+                // Salva localmente para telas da mesma máquina
                 localStorage.setItem('alocacaoGlobalSalva', JSON.stringify({
                     grupo: grupo,
                     cracha: crachaDigitado,
